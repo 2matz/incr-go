@@ -27,10 +27,10 @@ func init() {
 }
 
 func incrFunc(w http.ResponseWriter, r *http.Request) {
-	//if err := rd.Incr(CountKey).Err(); err != nil {
-	//	panic(err)
-	//}
-	rd.Incr(CountKey)
+	if err := rd.Incr(CountKey).Err(); err != nil {
+		panic(err)
+	}
+	//rd.Incr(CountKey)
 	fmt.Fprintf(w, "incr")
 }
 
