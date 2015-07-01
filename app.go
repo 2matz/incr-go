@@ -38,7 +38,7 @@ func countFunc(w http.ResponseWriter, r *http.Request) {
 	//if err != nil {
 	//	panic(err)
 	//}
-	fmt.Fprintf(w, val)
+	fmt.Fprintf(w, "count")
 }
 
 func main() {
