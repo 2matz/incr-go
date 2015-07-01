@@ -15,7 +15,7 @@ const (
 var rd *redis.Client
 
 func init() {
-	rd := redis.NewClient(&redis.Options{
+	rd = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
@@ -39,7 +39,7 @@ func countFunc(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Fprintf(w, "count")
+	fmt.Fprintf(w, val)
 }
 
 func main() {
