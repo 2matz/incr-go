@@ -14,7 +14,7 @@ const (
 
 var rd *redis.Client
 
-func redisNewClient() {
+func init() {
 	rd := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
