@@ -1,25 +1,49 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
-    "strings"
-    "log"
+	"fmt"
+	"gopkg.in/redis.v3"
+	"log"
+	"net/http"
+)
+
+const (
+	Port     = ":8080"
+	CountKey = "counter"
 )
 
 func incrFunc(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "incr") //ここでwに入るものがクライアントに出力されます。
+	if err := client.Incr(CountKey).Err(); err != nil {
+		panic(err)
+	}
+	fmt.Fprintf(w, "incr")
 }
 
 func countFunc(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "count") //ここでwに入るものがクライアントに出力されます。
+	val, err := client.Get(CountKey).Result()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Fprintf(w, val)
+}
+
+func redisNewClient() {
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	pong, err := client.Ping().Result()
+	fmt.Println(pong, err)
+	// Output: PONG <nil>
 }
 
 func main() {
-    http.HandleFunc("/incr", incrFunc) //アクセスのルーティングを設定します。
-    http.HandleFunc("/count", countFunc) //アクセスのルーティングを設定します。
-    err := http.ListenAndServe(":9090", nil) //監視するポートを設定します。
-    if err != nil {
-        log.Fatal("ListenAndServe: ", err)
-    }
+	http.HandleFunc("/incr", incrFunc)
+	http.HandleFunc("/count", countFunc)
+	err := http.ListenAndServe(Port, nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
 }
