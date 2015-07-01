@@ -12,10 +12,10 @@ const (
 	CountKey = "counter"
 )
 
-var redisClient *redis.Client
+var rd *redis.Client
 
 func redisNewClient() {
-	redisClient := redis.NewClient(&redis.Options{
+	rd := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
@@ -27,14 +27,14 @@ func redisNewClient() {
 }
 
 func incrFunc(w http.ResponseWriter, r *http.Request) {
-	if err := redisClient.Incr(CountKey).Err(); err != nil {
+	if err := rd.Incr(CountKey).Err(); err != nil {
 		panic(err)
 	}
 	fmt.Fprintf(w, "incr")
 }
 
 func countFunc(w http.ResponseWriter, r *http.Request) {
-	val, err := redisClient.Get(CountKey).Result()
+	val, err := rd.Get(CountKey).Result()
 	if err != nil {
 		panic(err)
 	}
