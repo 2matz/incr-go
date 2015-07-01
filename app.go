@@ -21,7 +21,7 @@ func init() {
 		DB:       0,  // use default DB
 	})
 
-	pong, err := redisClient.Ping().Result()
+	pong, err := rd.Ping().Result()
 	fmt.Println(pong, err)
 	// Output: PONG <nil>
 }
