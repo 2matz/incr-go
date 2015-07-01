@@ -21,15 +21,16 @@ func init() {
 		DB:       0,  // use default DB
 	})
 
-	pong, err := rd.Ping().Result()
-	fmt.Println(pong, err)
+	//pong, err := rd.Ping().Result()
+	//fmt.Println(pong, err)
 	// Output: PONG <nil>
 }
 
 func incrFunc(w http.ResponseWriter, r *http.Request) {
-	if err := rd.Incr(CountKey).Err(); err != nil {
-		panic(err)
-	}
+	//if err := rd.Incr(CountKey).Err(); err != nil {
+	//	panic(err)
+	//}
+	rd.Incr(CountKey)
 	fmt.Fprintf(w, "incr")
 }
 
