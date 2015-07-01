@@ -34,10 +34,10 @@ func incrFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func countFunc(w http.ResponseWriter, r *http.Request) {
-	//val, err := rd.Get(CountKey).Result()
-	//if err != nil {
-	//	panic(err)
-	//}
+	val, err := rd.Get(CountKey).Result()
+	if err != nil {
+		panic(err)
+	}
 	fmt.Fprintf(w, "count")
 }
 
