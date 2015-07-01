@@ -12,15 +12,17 @@ const (
 	CountKey = "counter"
 )
 
+var redisClient *redis.Client
+
 func incrFunc(w http.ResponseWriter, r *http.Request) {
-	if err := client.Incr(CountKey).Err(); err != nil {
+	if err := redisClient.Incr(CountKey).Err(); err != nil {
 		panic(err)
 	}
 	fmt.Fprintf(w, "incr")
 }
 
 func countFunc(w http.ResponseWriter, r *http.Request) {
-	val, err := client.Get(CountKey).Result()
+	val, err := redisClient.Get(CountKey).Result()
 	if err != nil {
 		panic(err)
 	}
@@ -28,18 +30,19 @@ func countFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func redisNewClient() {
-	client := redis.NewClient(&redis.Options{
+	redisClient := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
 
-	pong, err := client.Ping().Result()
+	pong, err := redisClient.Ping().Result()
 	fmt.Println(pong, err)
 	// Output: PONG <nil>
 }
 
 func main() {
+	redisClient = redisNewClient
 	http.HandleFunc("/incr", incrFunc)
 	http.HandleFunc("/count", countFunc)
 	err := http.ListenAndServe(Port, nil)
